@@ -89,11 +89,14 @@ func main() {
 
 	// 使用make创建切片格式 make([]Type,length,cap)
 	// 使用make()创建map时格式为 make(map[key_type]value_type,[cap])
-	var slice1 = make([]map[int]string, 10, 10) // 使用make创建元素类型为map的切片
 
-	slice1[0] = make(map[int]string, 1) // 初始化slice中的第一个map元素
-	slice1[0][0] = "beijing"
-	fmt.Println(slice1)
+	// 这里使用make()创建一个元素类型是map的slice，其中map的key值类型是int，value值类型string
+	var slice_map = make([]map[int]string, 10, 10)
+	slice_map[0] = make(map[int]string, 1) // 初始化slice中的第一个map元素
+	// 对slice的map进行赋值，因为slice_map切片元素的map的key类型为int
+	// 所以这里也就是对 slice_map 的第一个元素的map[0]赋值为"beijing"（slice_map[切片序号][map的key值]）
+	slice_map[0][0] = "beijing"
+	fmt.Println(slice_map)
 
 	// 6、值为切片类型的map
 
@@ -108,6 +111,6 @@ func main() {
 make创建map：	make(type,cap)  ->  make(map1[string]int,200)
 make创建slice：	make([]T, size ,cap)  ->  make([]int, 5, 10)
 make创建元素为map类型的slice：	make([]map[int]string, 5, 10) slice格式是[]type，此例Type是键为int，value为string的map
-make创建元素为slice类型的map：	make(map[string][]int, 10)  map[string]Type , 此例中Type是int类型的slice
+make创建value类型为slice的map：	make(map[string][]int, 10)  map[string]Type , 此例中Type是int类型的slice
 声明元素类型为map的切片时，切片和map都需要分别初始化
 */
