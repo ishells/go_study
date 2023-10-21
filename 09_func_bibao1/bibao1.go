@@ -29,8 +29,45 @@ func main() {
 	// 变量 ret 是一个函数（用以接收adder函数的返回值，即匿名函数）
 	// 并且它引用了其外部作用域中的x变量，此时ret就是一个闭包，在ret的生命周期内，变量x也一直有效
 	ret := adder(100)
-
+	// 相当于
+	/*
+		ret = func (y int) int{
+			println(y)
+			println(x)
+			x = 100 + y
+			print(x)
+			return x
+		}
+	*/
+	// ret2 调用ret时就是为形参y值传入一个实参200就是y值
 	ret2 := ret(200)
 
 	fmt.Println(ret2)
 }
+
+/*
+	目前理解的闭包操作即定义一个函数的返回值为函数，来达到调用外部环境参数的目的：
+		1、首先定义一个函数A，函数A本身需要参数，并通过函数返回值定义一个匿名函数接受外部参数
+		2、然后定义变量向函数A传不同实参值，并接收函数A的返回值，即预先定义的匿名函数（实现函数A）
+		3、通过向第二步定义的不同变量（对应不同参数的同一个匿名函数）传入不同参数达到不同的目的（调用外部环境参数）
+
+	示例如下（自己写的例子）：
+	//package main
+	//
+	//import "fmt"
+	//
+	//func stringSum(nameA string) func(nameB string) string {
+	//	return func(nameB string) string {
+	//		return nameA + nameB
+	//	}
+	//}
+	//
+	//func main() {
+	//	nameA := stringSum("张")
+	//	nameB := stringSum("李")
+	//
+	//	fmt.Println(nameA("三"))
+	//	fmt.Println(nameB("四"))
+	//
+	//}
+*/

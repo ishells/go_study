@@ -12,9 +12,27 @@ func main() {
 	x := 1
 	y := 2
 	defer calculation("AA", x, calculation("A", x, y))
+	// 先执行defer内嵌套内的cal()函数
+	// print(A,1,2,3)
+	// defer cal("AA", 1,3)
 	x = 10
 	defer calculation("BB", x, calculation("B", x, y))
+	// 先执行defer内嵌套内的cal()函数
+	// print(B,10,2,12)
+	// defer cal(BB,10,12)
 	y = 20
+
+	// 最后逆序执行defer
+	// defer cal(BB,10,12) -> print(BB,10,12,22)
+	// defer cal(AA,1,3) -> print(AA,1,3,4)
+
+	// 最后结果：
+	/*
+		print(A,1,2,3)
+		print(B,10,2,12)
+		print(BB,10,12,22)
+		print(AA,1,3,4)
+	*/
 }
 
 /*
