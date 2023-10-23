@@ -24,6 +24,8 @@
 
 // 参考：https://www.liwenzhou.com/posts/Go/12-interface/
 
+// test
+
 package main
 
 import "fmt"
