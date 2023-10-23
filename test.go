@@ -1,6 +1,8 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
 //
 //import (
@@ -63,6 +65,38 @@ import "fmt"
 //	println(ios("lightning", "iphone 14"))
 //}
 
+type User struct {
+	Name   string `json:"name"`
+	Age    int    `json:"age"`
+	Gender string `json:"gender"`
+}
+
+type Animal struct {
+	Name string
+}
+
+type Dog struct {
+	Feet int
+	*Animal
+}
+
+func newDog(name string, fleet int) *Dog {
+	return &Dog{
+		Feet: fleet,
+		Animal: &Animal{
+			Name: name,
+		},
+	}
+}
+
+func (animal *Animal) move() {
+	fmt.Printf("%s move...\n", animal.Name)
+}
+
+func (dog *Dog) run() {
+	fmt.Printf("%s run...\n", dog.Name)
+}
+
 func init() {
 	fmt.Println("This is init func test")
 }
@@ -78,5 +112,28 @@ func compare[T int | float64](a, b T) T {
 }
 
 func main() {
-	compare(1.6, 2.6)
+	// dog1 := newDog("dog", 4)
+	// dog1.move()
+	// dog1.run()
+	// compare(1.6, 2.6)
+
+	// user1 := &User{
+	// 	Name:   "ops",
+	// 	Age:    20,
+	// 	Gender: "man",
+	// }
+	// jsonData, marshalErr := json.Marshal(*user1)
+	// if marshalErr != nil {
+	// 	fmt.Println("marshal error")
+	// } else {
+	// 	fmt.Printf("%v\n", string(jsonData))
+	// }
+
+	// user2 := User{}
+	// jsonStr := `{"name":"ishells","age":22,"gender":"man"}`
+	// if json.Unmarshal([]byte(jsonStr), &user2) != nil {
+	// 	fmt.Println("Unmalshal failed")
+	// } else {
+	// 	fmt.Printf("%v", user2)
+	// }
 }

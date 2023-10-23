@@ -88,6 +88,17 @@ type User struct {
 	Address Address
 }
 
+func newUser(name string, gender string, province string, city string) *User {
+	return &User{
+		Name:   name,
+		Gender: gender,
+		Address: Address{
+			Province: province,
+			City:     city,
+		},
+	}
+}
+
 func main() {
 	user1 := User{
 		Name:   "小王子",
@@ -97,6 +108,11 @@ func main() {
 			City:     "威海",
 		},
 	}
+
+	// 通过构造函数初始化嵌套结构体
+	user2 := newUser("ops", "nan", "shanghai", "shanghai")
+	fmt.Println(*user2)
+
 	fmt.Println(user1)
 	fmt.Println(user1.Name, user1.Address.City)
 }
