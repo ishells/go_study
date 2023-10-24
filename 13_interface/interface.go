@@ -77,7 +77,7 @@ func main() {
 		...
 	}
 
-	接口类型名：Go语言的接口在命名时，一般会在单词后面添加er，如有写操作的接口叫Writer，有关闭操作的接口叫closer等。接口名最好要能突出该接口的类型含义。
+	接口名：Go语言的接口在命名时，一般会在单词后面添加er，如有写操作的接口叫Writer，有关闭操作的接口叫closer等。接口名最好要能突出该接口的类型含义。
 	方法名：当接口名首字母是大写且其包含的方法名首字母也是大写时，这个方法可以被接口所在的包（package）之外的代码访问。
 	参数列表、返回值列表：参数列表和返回值列表中的参数变量名可以省略。
 
@@ -109,11 +109,77 @@ func main() {
 	}
 	这样就称为Bird实现了Singer接口
 
+2.1 为什么要使用接口？
+	可见interface_example.go示例
+
 3、指针接收者实现接口和值接收者实现接口区别
 	使用值接收者实现接口之后，不管是结构体类型还是对应的结构体指针类型的变量都可以赋值给该接口变量；而使用指针接收者实现接口时，只有结构体指针类型的变量可以赋值给该接口变量
 
 
 4、结构体实现多个接口和接口嵌套
+// src/io/io.go
+
+type Reader interface {
+	Read(p []byte) (n int, err error)
+}
+
+type Writer interface {
+	Write(p []byte) (n int, err error)
+}
+
+type Closer interface {
+	Close() error
+}
+
+// ReadWriter 是组合Reader接口和Writer接口形成的新接口类型
+type ReadWriter interface {
+	Reader
+	Writer
+}
+
+// ReadCloser 是组合Reader接口和Closer接口形成的新接口类型
+type ReadCloser interface {
+	Reader
+	Closer
+}
+
+// WriteCloser 是组合Writer接口和Closer接口形成的新接口类型
+type WriteCloser interface {
+	Writer
+	Closer
+}
+
+对于这种由多个接口类型组合形成的新接口类型，同样只需要实现新接口类型中规定的所有方法就算实现了该接口类型。
+
+
+接口也可以作为结构体的一个字段，我们来看一段Go标准库sort源码中的示例。
+// src/sort/sort.go
+
+// Interface 定义通过索引对元素排序的接口类型
+type Interface interface {
+    Len() int
+    Less(i, j int) bool
+    Swap(i, j int)
+}
+
+
+// reverse 结构体中嵌入了Interface接口
+type reverse struct {
+    Interface
+}
+通过在结构体中嵌入一个接口类型，从而让该结构体类型实现了该接口类型，并且还可以改写该接口的方法。
+// Less 为reverse类型添加Less方法，重写原Interface接口类型的Less方法
+func (r reverse) Less(i, j int) bool {
+	return r.Interface.Less(j, i)
+}
+Interface类型原本的Less方法签名为 Less(i, j int) bool，此处重写为r.Interface.Less(j, i)，即通过将索引参数交换位置实现反转。
+
+在这个示例中还有一个需要注意的地方是reverse结构体本身是不可导出的（结构体类型名称首字母小写），sort.go中通过定义一个可导出的Reverse函数来让使用者创建reverse结构体实例。
+func Reverse(data Interface) Interface {
+	return &reverse{data}
+}
+这样做的目的是保证得到的reverse结构体中的Interface属性一定不为nil，否者r.Interface.Less(j, i)就会出现空指针panic。
+
 
 
 5、空接口
@@ -129,6 +195,63 @@ func main() {
 	由于接口类型的值可以是任意一个实现了该接口的类型值（即任意类型都可以实现interface），
 	所以接口值除了需要记录具体值之外，还需要记录这个值属于的类型。
 	也就是说接口值由“类型”和“值”组成，鉴于这两部分会根据存入值的不同而发生变化，我们称之为接口的动态类型和动态值
+           类型type
+		  /
+	接口值
+		  \
+		   值value
+
+通过一个示例来加深对接口值的理解。下面的示例代码中，定义了一个Mover接口类型和两个实现了该接口的Dog和Car结构体类型。
+type Mover interface {
+	Move()
+}
+
+type Dog struct {
+	Name string
+}
+
+func (d *Dog) Move() {
+	fmt.Println("狗在跑~")
+}
+
+type Car struct {
+	Brand string
+}
+
+func (c *Car) Move() {
+	fmt.Println("汽车在跑~")
+}
+首先，我们创建一个Mover接口类型的变量m。
+var m Mover
+此时，接口变量m是接口类型的零值，也就是它的类型和值部分都是nil
+我们可以使用m == nil来判断此时的接口值是否为空。
+fmt.Println(m == nil)  // true
+**注意：**我们不能对一个空接口值调用任何方法，否则会产生panic。
+m.Move() // panic: runtime error: invalid memory address or nil pointer dereference
+接下来，我们将一个*Dog结构体指针赋值给变量m
+m = &Dog{Name: "旺财"}
+此时，接口值m的动态类型会被设置为*Dog，动态值为结构体变量的拷贝。
+然后，我们给接口变量m赋值为一个*Car类型的值。
+var c *Car
+m = c
+这一次，接口值m的动态类型为*Car，动态值为nil。
+**注意：**此时接口变量m与nil并不相等，因为它只是动态值的部分为nil，而动态类型部分保存着对应值的类型。
+fmt.Println(m == nil) // false
+
+
+接口值是支持相互比较的，当且仅当接口值的动态类型和动态值都相等时才相等。
+
+var (
+	x Mover = new(Dog)
+	y Mover = new(Car)
+)
+fmt.Println(x == y) // false
+但是有一种特殊情况需要特别注意，如果接口值保存的动态类型相同，但是这个动态类型不支持互相比较（比如切片），那么对它们相互比较时就会引发panic。
+
+var z interface{} = []int{1, 2, 3}
+fmt.Println(z == z) // panic: runtime error: comparing uncomparable type []int
+
+
 
 
 7、类型断言
