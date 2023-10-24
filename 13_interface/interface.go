@@ -45,11 +45,11 @@ func (p *Person) Sing() {
 }
 
 func (p *Person) Move() {
-	fmt.Println("Sing....")
+	fmt.Println("Move....")
 }
 
 func (p *Person) Eat() {
-	fmt.Println("Sing....")
+	fmt.Println("Eat....")
 }
 
 var _ Personer = &Person{}
