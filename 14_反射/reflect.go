@@ -82,7 +82,7 @@ func NilAndValid() {
 //	}
 //
 //	t := reflect.TypeOf(stu1)
-//	fmt.Println("t.Name():", t.Name(), " ,t.Kind(): ", t.Kind()) // student struct
+//	fmt.Println("t.Name():", t.Name(), " ,t.Kind(): ", t.Kind()) // student(struct名称) struct
 //	// 通过for循环遍历结构体的所有字段信息
 //	fmt.Println("通过索引遍历结构体：")
 //	for i := 0; i < t.NumField(); i++ {

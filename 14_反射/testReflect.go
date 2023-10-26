@@ -5,43 +5,64 @@ import (
 	"reflect"
 )
 
-type student1 struct {
-	Name  string `json:"name"`
-	Score int    `json:"score"`
+// type Runner interface {
+// 	Run()
+// 	Cry()
+// }
+
+type Student struct {
+	Name string
+	Age  int
 }
 
-// 给student添加两个方法 Study和Sleep(注意首字母大写)
-func (s student1) Study() string {
-	msg := "好好学习，天天向上。"
-	fmt.Println(msg)
-	return msg
+// func (stu Student) Run() {}
+// func (stu Student) Cry() {}
+
+func newStudent(name string, age int) *Student {
+	return &Student{
+		Name: name,
+		Age:  age,
+	}
 }
 
-func (s student1) Sleep() string {
-	msg := "好好睡觉，快快长大。"
-	fmt.Println(msg)
-	return msg
-}
+// 使用Elem()方法reflect包反射的指针值
+func reflectElemSetValue(i interface{}) interface{} {
+	value := reflect.ValueOf(i)
+	fmt.Println("value.Elem.Kind()值：", value.Elem().Kind())
 
-func printMethod1(x interface{}) {
-	t := reflect.TypeOf(x)
-	v := reflect.ValueOf(x)
-
-	fmt.Println(t.NumMethod())
-	for i := 0; i < v.NumMethod(); i++ {
-		methodType := v.Method(i).Type()
-		fmt.Printf("method name:%s\n", t.Method(i).Name)
-		fmt.Printf("method:%s\n", methodType)
-		// 通过反射调用方法传递的参数必须是 []reflect.Value 类型
-		var args = []reflect.Value{}
-		v.Method(i).Call(args)
+	switch {
+	case value.Kind() != reflect.Ptr:
+		fmt.Println("error: 参数必须是指针")
+		return nil
+	case value.Elem().Kind() == reflect.Int:
+		value.Elem().SetInt(200)
+		return i
+	default:
+		return nil
 	}
 }
 
 func main() {
-	stu1 := student1{
-		Name:  "小王子",
-		Score: 90,
+
+	// 判断 Struct 是否实现了 interface
+	// var _ Runner = &Student{}
+	// var _ Runner = (*Student)(nil)
+
+	newStudent("ops", 22)
+	stu1 := Student{
+		Name: "ops1",
+		Age:  22,
 	}
-	printMethod1(stu1)
+	fmt.Println(reflect.TypeOf(stu1).Name())
+	fmt.Println(reflect.TypeOf(stu1).Kind())
+	fmt.Println(reflect.TypeOf(stu1).NumField())
+
+	for i := 0; i < reflect.TypeOf(stu1).NumField(); i++ {
+		field := reflect.TypeOf(stu1).Field(i)
+		fmt.Printf("name:%s index:%d type:%v \n", field.Name, field.Index, field.Type)
+	}
+
+	testNum := 100
+	valueAfter := reflectElemSetValue(&testNum)
+	fmt.Println(*valueAfter.(*int))
 }

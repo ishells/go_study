@@ -315,5 +315,4 @@ fmt.Println(z == z) // panic: runtime error: comparing uncomparable type []int
 	var _ IRouter = &RouterGroup{}  // 确保RouterGroup实现了接口IRouter
 	// 上面的代码中也可以使用var _ IRouter = (*RouterGroup)(nil)进行验证
 
-
 */
