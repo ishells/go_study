@@ -64,6 +64,4 @@ func main() {
 	testNum := 100
 	valueAfter := reflectElemSetValue(&testNum)
 	fmt.Println(*valueAfter.(*int))
-	// test
-	// test1
 }

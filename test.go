@@ -101,7 +101,7 @@ func init() {
 	fmt.Println("This is init func test")
 }
 
-// 类型约束（泛型特性），具体用法事后可详细查阅资料学习
+// 类型约束（泛型特性），(16_泛型) 具体用法事后可详细查阅资料学习
 func compare[T int | float64](a, b T) T {
 	if a > b {
 		print(a)
