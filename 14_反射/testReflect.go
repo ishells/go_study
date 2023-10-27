@@ -61,8 +61,9 @@ func main() {
 		field := reflect.TypeOf(stu1).Field(i)
 		fmt.Printf("name:%s index:%d type:%v \n", field.Name, field.Index, field.Type)
 	}
-
 	testNum := 100
 	valueAfter := reflectElemSetValue(&testNum)
 	fmt.Println(*valueAfter.(*int))
+	// test
+	// test1
 }
