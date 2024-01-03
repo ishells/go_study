@@ -10,7 +10,7 @@ import (
 
 // tcp/client/main.go
 
-// 客户端
+// 客户端 ..
 func main() {
 	conn, err := net.Dial("tcp", "127.0.0.1:20000")
 	if err != nil {
