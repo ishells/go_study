@@ -1,8 +1,9 @@
-# 1、Tips
+#### FROM Notion notes
+# 1、Tips 
 
 `Goland快捷键`
 
-- CTRL+SHIFT+F，进行全局查找
+- CTRL+SHIFT+F，进行全局查找  如若无用查看是否与输入法快捷键冲突
 - CTRL+R，替换文本
 - CTRL+Backspace，按单词进行删除
 - **SHIFT+ENTER，可以向下插入新行，即使光标在当前行的中间**
@@ -100,6 +101,13 @@ ch := make(chan int)
 // 创建一个容量为10的有缓冲通道
 ch := make(chan int, 10)
 ```
+
+- Goroutine 一般将其翻译为Go语言实现的协程，也就是说Golang在语言层面就实现了协程的支持
+
+- runtime包
+
+
+
 
 # 5、条件语句
 
