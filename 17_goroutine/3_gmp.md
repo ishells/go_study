@@ -13,7 +13,7 @@
     >> 后来操作系统就具有了最早的并发能力:多进程并发,当一个进程阻塞的时候,切换到另外等待执行的进程,这样就能尽量把CPU利用起来,CPU就不浪费了。
 
     - 多进程/线程时代有了调度器需求
-    ![new_os_cpu](img\new_os_cpu.png)
+    ![new_os_cpu](img/new_os_cpu.png)
 
     > 在多进程/多线程的操作系统中,就解决了阻塞的问题,因为一个进程阻塞cpu可以立刻切换到其他进程中去执行,
     > 而且调度cpu的算法可以保证在运行的进程都可以被分配到cpu的运行时间片。
@@ -23,7 +23,7 @@
     
     - 怎么才能提高CPU的利用率呢?
     > 对于Linux操作系统来讲,cpu对进程的态度和线程的态度是一样的。
-    ![cpu_lost_time](img\cpu_lost_time.png)
+    ![cpu_lost_time](img/cpu_lost_time.png)
     > 很明显,CPU调度切换的是进程和线程。尽管线程看起来很美好,但实际上多线程开发设计会变得更加复杂,要考虑很多同步竞争等问题,如锁、竞争冲突等。
   
     - 协程来提高CPU利用率
@@ -53,16 +53,16 @@
         > M个协程绑定N个线程（一般情况下肯定是M>N），是N:1和1：1类型的结合，克服了以上两种模型的缺点，但实现起来最为复杂。
         > 协程跟线程是有区别的，线程由CPU调度，是抢占式的，协程由用户态调度，是协作式的，一个协程让出CPU后，才执行下一个协程。
 
-  ![cpu_lost_time](.\img\cpu_lost_time.png)
+  ![cpu_lost_time](img/cpu_lost_time.png)
 
-  ![common_concept](img\common_concept.png)
+  ![common_concept](img/common_concept.png)
 
-  ![goroutine](img\goroutine.png)
+  ![goroutine](img/goroutine.png)
 
-  ![gmp_concept](img\gmp_concept.png)
+  ![gmp_concept](img/gmp_concept.png)
 
-  ![gmp_concept_1](img\gmp_concept_1.png)
+  ![gmp_concept_1](img/gmp_concept_1.png)
 
-  ![go_func_style](img\go_func_style.png)
+  ![go_func_style](img/go_func_style.png)
 
-  ![go_func_style_reason](img\go_func_style_reason.png)
+  ![go_func_style_reason](img/go_func_style_reason.png)
